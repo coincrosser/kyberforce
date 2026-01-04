@@ -1,0 +1,183 @@
+/* Base colors */
+:root {
+  --kf-bg: #0b0e11;
+  --kf-core: #00e0ff; /* ion blue / cyan */
+  --kf-core-soft: #0aa3c4; /* softer cyan */
+  --kf-energy: #35ff8a; /* restrained energy green */
+  --kf-orbit: #1a222b;
+  --kf-orbit-bright: #3b4b5e;
+}
+
+/* Container utility */
+#kyberforce-logo {
+  max-width: 160px;
+  height: auto;
+  display: block;
+}
+
+/* Background plate */
+#kyberforce-logo .kf-bg {
+  fill: var(--kf-bg);
+}
+
+/* Orbit base + segments */
+#kyberforce-logo .kf-orbit-base {
+  fill: none;
+  stroke: #10151b;
+  stroke-width: 4;
+}
+
+#kyberforce-logo .kf-orbit-segment {
+  fill: none;
+  stroke: var(--kf-orbit-bright);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+/* Core */
+#kyberforce-logo .kf-core-halo {
+  fill: none;
+  stroke: var(--kf-core-soft);
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+#kyberforce-logo .kf-core {
+  fill: var(--kf-core);
+}
+
+#kyberforce-logo .kf-core-geometry {
+  fill: var(--kf-energy);
+  opacity: 0.85;
+}
+
+/* --------- Animation wiring ---------- */
+
+/* Initial dormant state */
+#kyberforce-logo {
+  opacity: 0;
+  transform-origin: center center;
+  transform-box: fill-box;
+}
+
+/* Make SVG transforms consistent across browsers */
+#kyberforce-logo .kf-orbit-group,
+#kyberforce-logo .kf-core-group,
+#kyberforce-logo .kf-core {
+  transform-box: fill-box;
+}
+
+/* Play the sequence once on load */
+#kyberforce-logo {
+  animation: kf-fade-in 800ms ease-out forwards;
+}
+
+/* Inner core: delayed subtle pulse */
+#kyberforce-logo .kf-core {
+  transform-origin: center;
+  animation:
+    kf-core-pulse 1600ms ease-out 400ms 2,
+    kf-core-glow 1600ms ease-out 400ms 2;
+}
+
+/* Orbit slow rotational alignment */
+#kyberforce-logo .kf-orbit-group {
+  transform-origin: center;
+  animation: kf-orbit-align 1400ms cubic-bezier(0.22, 0.61, 0.36, 1) 500ms forwards;
+}
+
+/* Hover reactivation: very subtle */
+#kyberforce-logo:hover .kf-core {
+  animation: kf-core-pulse-soft 1200ms ease-out forwards;
+}
+
+#kyberforce-logo:hover .kf-orbit-group {
+  animation: kf-orbit-nudge 900ms ease-out forwards;
+}
+
+/* --------- Keyframes ---------- */
+
+@keyframes kf-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes kf-core-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes kf-core-glow {
+  0% {
+    filter: drop-shadow(0 0 0px rgba(0, 224, 255, 0.0));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(0, 224, 255, 0.7));
+  }
+  100% {
+    filter: drop-shadow(0 0 0px rgba(0, 224, 255, 0.0));
+  }
+}
+
+@keyframes kf-orbit-align {
+  0% {
+    transform: rotate(-18deg);
+  }
+  70% {
+    transform: rotate(6deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes kf-core-pulse-soft {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgba(0, 224, 255, 0.0));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 8px rgba(0, 224, 255, 0.5));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgba(0, 224, 255, 0.0));
+  }
+}
+
+@keyframes kf-orbit-nudge {
+  0% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #kyberforce-logo,
+  #kyberforce-logo .kf-core,
+  #kyberforce-logo .kf-orbit-group {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+}
